@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import MyContext from "../ContextApi/MyContext";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const { setSignUser } = useContext(MyContext)
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -42,10 +44,10 @@ const Login = () => {
   };
   const handlesubmit = async (e) => {
     e.preventDefault();
-  
+
     if (validateForm()) {
       const { email, password } = credentials;
-  
+
       try {
         const res = await fetch("https://capobrain-backend.vercel.app/api/auth/login", {
           method: "POST",
@@ -54,9 +56,11 @@ const Login = () => {
           },
           body: JSON.stringify({ email, password }),
         });
-  
+
         const json = await res.json();
-        const errorElement = document.getElementById("number"); // Assuming "number" is where you want to show errors.
+        console.log(json);
+
+        const errorElement = document.getElementById("number");
         if (!res.ok) {
           if (errorElement) {
             errorElement.innerText = json.error || "Something went wrong.";
@@ -68,21 +72,22 @@ const Login = () => {
             confirmButtonText: "OK",
           });
           return;
-        } else{
-
-        sessionStorage.setItem("User", JSON.stringify(json));
-        if (json.email === "capobrain@gmail.com") {
-          navigate("/adminpanel");
         } else {
-          navigate("/userprofile");
+          sessionStorage.setItem("User", JSON.stringify(json));
+          setSignUser(json)
+          if (json.email === "capobrain@gmail.com") {
+            navigate("/adminpanel");
+          } else {
+            navigate("/userprofile");
+          }
+
+          Swal.fire({
+            title: "Success!",
+            text: "Login successful",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
         }
-  
-        Swal.fire({
-          title: "Success!",
-          text: "Login successful",
-          icon: "success",
-          confirmButtonText: "OK",
-        });}
       } catch (error) {
         console.error("Error logging in:", error);
         Swal.fire({
@@ -207,11 +212,11 @@ const Login = () => {
                         {passwordVisible ? <FaEye /> : <FaEyeSlash />}
                       </button>
                     </div>
-                      {errors.password && (
-                        <span className="text-sm text-red-500">
-                          {errors.password}
-                        </span>
-                      )}
+                    {errors.password && (
+                      <span className="text-sm text-red-500">
+                        {errors.password}
+                      </span>
+                    )}
 
                     <div className="relative py-2">
                       <button className="text-white rounded-md px-6 py-1 btn-anim">

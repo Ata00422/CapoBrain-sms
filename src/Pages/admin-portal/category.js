@@ -3,7 +3,6 @@ import Sidebar from "./component/sidebar";
 import AdminNav from "./component/admin-nav";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
-import { FaEye } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 
@@ -129,12 +128,12 @@ const Categories = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ categoryName: formData.categoryName.trim() }), // Ensure proper data
+          body: JSON.stringify({ category }),
         }
       );
 
-    const data = await response.json();
-    console.log("API Response:", data);
+      const data = await response.json();
+      console.log("API Response:", data);
 
       if (response.ok) {
         Swal.fire(
@@ -162,9 +161,9 @@ const Categories = () => {
 
     if (validateForm()) {
       if (editId) {
-        updateCategory(); 
+        updateCategory();
       } else {
-        addCategory(); 
+        addCategory();
       }
     } else {
       Swal.fire("Error!", "Please fix the errors in the form.", "error");
@@ -308,7 +307,7 @@ const Categories = () => {
               <button
                 className="text-gray-500 hover:text-gray-800"
                 onClick={() => setIsAddModalOpen(false)}
-                >
+              >
                 ✕
               </button>
             </div>
@@ -353,8 +352,8 @@ const Categories = () => {
                   type="submit"
                   className="btn-anim w-auto rounded-full shadow-xl font-medium text-white px-4 py-2"
                 >
-            Upload Category
-            </button>
+                  Upload Category
+                </button>
               </div>
             </form>
           </div>
@@ -392,7 +391,7 @@ const Categories = () => {
                     onChange={(e) => {
                       const value = e.target.value;
                       setFormData({ categoryName: value });
-                      setSeCategory(value); 
+                      setSeCategory(value);
                     }}
                     placeholder="Enter Category Name"
                   />

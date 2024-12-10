@@ -1,13 +1,14 @@
 import React, { useContext } from 'react'
-import AdminPortal from "./index"
 import MyContext from '../../ContextApi/MyContext'
 import { useNavigate } from 'react-router-dom'
-export default function AdminPanel() {
+import UserProfile from './index'
+
+export default function UserPanel() {
     const { signUser } = useContext(MyContext)
     const navigate = useNavigate()
     return (
         <>
-            {signUser && signUser.email === "capobrain@gmail.com" ? <AdminPortal /> : navigate("/userLogin")}
+            {signUser && signUser.email !== "capobrain@gmail.com" ? <UserProfile /> : navigate("/userLogin")}
         </>
     )
 }

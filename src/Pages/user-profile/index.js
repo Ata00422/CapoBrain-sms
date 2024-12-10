@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "./component/sidebar";
 import UserNav from "./component/user-nav";
 import { Helmet } from "react-helmet";
-import { VscLightbulbSparkle } from "react-icons/vsc";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 
